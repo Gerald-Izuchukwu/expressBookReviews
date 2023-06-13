@@ -21,36 +21,24 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/reviews/:isbn', function (req, res) {
-    const isbn = parseInt(req.params.isbn);
-  
-    getBookReviews(isbn)
-      .then(reviews => {
-        if (reviews.length === 0) {
-          return res.status(404).json({ message: 'No reviews found for the book' });
-        }
-        res.json(reviews);
-      })
-      .catch(error => {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
-      });
-  });
-  
-  function getBookReviews(isbn) {
-    return new Promise((resolve, reject) => {
-      // Assuming `books` is accessible here
-  
-      const book = books[isbn];
-      if (!book) {
-        reject('Book not found');
-      } else {
-        const reviews = book.reviews;
-        resolve(reviews);
-      }
+public_users.get('/', function (req, res) {
+  return new Promise((resolve, reject) => {
+    const response = {
+      message: "success",
+      books: books
+    };
+
+    resolve(response);
+  })
+    .then(response => {
+      res.status(200).json(response);
+    })
+    .catch(error => {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
     });
-  }
-  
+});
+
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn', function (req, res) {
     const isbn = parseInt(req.params.isbn);
